@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kristine Stefanija</title>
+  <meta name="description" content="Artist painting and launching art drops.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #1E7FFF;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Space Mono", monospace;
+      background-color: var(--white);
+      color: var(--blue);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1.5rem;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+      max-width: 28rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logo {
+      width: 280px;
+      height: auto;
+    }
+
+    .emojis {
+      font-size: 1.5rem;
+      letter-spacing: 0.5em;
+    }
+
+    .main-text {
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.625;
+      font-size: 0.875rem;
+    }
+
+    @media (min-width: 768px) {
+      .main-text {
+        font-size: 1rem;
+      }
+    }
+
+    .instagram-link {
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      font-size: 0.875rem;
+      color: var(--blue);
+    }
+
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .signup-form {
+        flex-direction: row;
+        width: auto;
+      }
+    }
+
+    .signup-form input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      font-family: "Space Mono", monospace;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      background: transparent;
+      border: 2px solid var(--blue);
+      border-radius: 9999px;
+      color: var(--blue);
+      outline: none;
+    }
+
+    @media (min-width: 640px) {
+      .signup-form input {
+        width: 16rem;
+      }
+    }
+
+    .signup-form input::placeholder {
+      color: var(--blue);
+      opacity: 0.6;
+    }
+
+    .signup-form button {
+      padding: 0.5rem 1.5rem;
+      font-family: "Space Mono", monospace;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      background: var(--blue);
+      color: var(--white);
+      border: 2px solid var(--blue);
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .signup-form button:hover {
+      opacity: 0.9;
+    }
+
+    .confirmation {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="Kristine Stefanija" class="logo">
+
+    <div class="emojis">🧿🧿🧿</div>
+
+    <p class="main-text">
+      I'M KRISTINE AND I'M CURRENTLY PAINTING! BE THE FIRST ONE TO FIND OUT WHEN I LAUNCH MY NEXT ART DROP.
+    </p>
+
+    <a href="https://www.instagram.com/kristinestefanija/" target="_blank" rel="noopener noreferrer" class="instagram-link">
+      INSTAGRAM
+    </a>
+
+    <p class="confirmation hidden" id="confirmation">YOU'RE IN.</p>
+
+    <form class="signup-form" id="signup-form">
+      <input type="email" placeholder="EMAIL ADDRESS" required>
+      <button type="submit">NOTIFY ME</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('signup-form').classList.add('hidden');
+      document.getElementById('confirmation').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
