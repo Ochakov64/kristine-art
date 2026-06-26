@@ -56,8 +56,9 @@ exports.handler = async (event) => {
     </head>
     <body style="background-color: #fffeea; margin: 0; padding: 20px;">
       <div class="container" style="max-width: 600px; margin: 0 auto; background-color: #fffeea; padding: 40px 20px; text-align: center;">
-        <div style="font-size: 24px; margin: 10px 0;">🧿 🧿 🧿</div>
-        <h2 style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 28px; margin: 20px 0; text-transform: uppercase; color: #1E7FFF;">YOU'RE IN!</h2>
+        <div style="font-size: 28px; margin: 10px 0;">🌞</div>
+        <h2 style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 24px; margin: 20px 0; text-transform: uppercase; color: #1E7FFF; line-height: 1.4;">Good energy is coming your way</h2>
+        <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">Thank you so much for being here.</p>
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">Thank you so much for being here.</p>
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">I release my work in limited drops throughout the year.</p>
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">You'll be the first to access my next art drop.</p>
