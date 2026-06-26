@@ -59,7 +59,6 @@ exports.handler = async (event) => {
         <div style="font-size: 24px; margin: 10px 0;">🧿 🧿 🧿</div>
         <h2 style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 28px; margin: 20px 0; text-transform: uppercase; color: #1E7FFF;">YOU'RE IN!</h2>
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">Thank you so much for being here.</p>
-        <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">Thank you so much for being here.</p>
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">I release my work in limited drops throughout the year.</p>
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">You'll be the first to access my next art drop.</p>
         <div style="font-size: 24px; margin: 10px 0;">🧿 🧿 🧿</div>
