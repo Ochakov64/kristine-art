@@ -72,7 +72,10 @@ exports.handler = async (event) => {
     personalizations: [{
       to: [{ email }]
     }],
-    from: { email: fromEmail },
+    from: {
+      email: fromEmail,
+      name: 'Kristine Stefanija'
+    },
     subject: 'You\'re In! 🧿',
     content: [{
       type: 'text/html',
