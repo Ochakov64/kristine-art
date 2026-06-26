@@ -195,6 +195,7 @@
       e.preventDefault();
 
       const email = this.querySelector('input[name="email"]').value;
+      const form = this;
 
       try {
         await fetch('/.netlify/functions/send-welcome-email', {
@@ -204,6 +205,16 @@
         });
       } catch (error) {
         console.error('Error sending email:', error);
+      }
+
+      try {
+        const formData = new FormData(form);
+        await fetch(form.getAttribute('action') || '/', {
+          method: 'POST',
+          body: formData
+        });
+      } catch (error) {
+        console.error('Error submitting form:', error);
       }
 
       setTimeout(() => {
