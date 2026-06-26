@@ -1,0 +1,9 @@
+{
+  "name": "kristine-art",
+  "version": "1.0.0",
+  "description": "Kristine Stefanija Art Portfolio",
+  "main": "index.html",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0"
+  }
+}

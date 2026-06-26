@@ -191,7 +191,21 @@
   </div>
 
   <script>
-    document.getElementById('signup-form').addEventListener('submit', function(e) {
+    document.getElementById('signup-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const email = this.querySelector('input[name="email"]').value;
+
+      try {
+        await fetch('/.netlify/functions/send-welcome-email', {
+          method: 'POST',
+          body: JSON.stringify({ email }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error) {
+        console.error('Error sending email:', error);
+      }
+
       setTimeout(() => {
         document.getElementById('signup-form').classList.add('hidden');
         document.getElementById('confirmation').classList.remove('hidden');
