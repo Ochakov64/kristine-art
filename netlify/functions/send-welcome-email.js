@@ -1,25 +1,38 @@
 const https = require('https');
 
 exports.handler = async (event) => {
-  console.log('Function triggered with event:', event);
+  console.log('=== Function triggered ===');
+  console.log('API Key exists:', !!process.env.SENDGRID_API_KEY);
+  console.log('From Email:', process.env.SENDGRID_FROM_EMAIL);
 
   let email;
 
   try {
     const body = JSON.parse(event.body);
-    email = body.email || body.payload?.data?.email;
+    email = body.email;
+    console.log('Email from request:', email);
   } catch (e) {
     console.error('Error parsing body:', e);
-    return { statusCode: 400, body: 'Invalid request' };
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid request' }) };
   }
 
   if (!email) {
-    console.error('No email found in request');
-    return { statusCode: 400, body: 'Email is required' };
+    console.error('No email provided');
+    return { statusCode: 400, body: JSON.stringify({ error: 'Email is required' }) };
   }
 
   const apiKey = process.env.SENDGRID_API_KEY;
-  const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'hello@kristinestefanija.com';
+  const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+
+  if (!apiKey) {
+    console.error('SENDGRID_API_KEY not set');
+    return { statusCode: 500, body: JSON.stringify({ error: 'API key not configured' }) };
+  }
+
+  if (!fromEmail) {
+    console.error('SENDGRID_FROM_EMAIL not set');
+    return { statusCode: 500, body: JSON.stringify({ error: 'From email not configured' }) };
+  }
 
   const htmlEmail = `
     <!DOCTYPE html>
@@ -85,6 +98,8 @@ exports.handler = async (event) => {
   };
 
   return new Promise((resolve) => {
+    const postData = JSON.stringify(mailData);
+
     const req = https.request({
       hostname: 'api.sendgrid.com',
       port: 443,
@@ -92,33 +107,43 @@ exports.handler = async (event) => {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData)
       }
     }, (res) => {
       console.log(`Sendgrid response status: ${res.statusCode}`);
+      let data = '';
 
-      if (res.statusCode === 202) {
-        resolve({
-          statusCode: 200,
-          body: JSON.stringify({ success: true, message: 'Email sent' })
-        });
-      } else {
-        resolve({
-          statusCode: 500,
-          body: JSON.stringify({ error: `Sendgrid error: ${res.statusCode}` })
-        });
-      }
-    });
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
 
-    req.on('error', (e) => {
-      console.error('Request error:', e);
-      resolve({
-        statusCode: 500,
-        body: JSON.stringify({ error: 'Failed to send email' })
+      res.on('end', () => {
+        if (res.statusCode === 202) {
+          console.log('Email sent successfully');
+          resolve({
+            statusCode: 200,
+            body: JSON.stringify({ success: true, message: 'Email sent' })
+          });
+        } else {
+          console.error(`Sendgrid error ${res.statusCode}:`, data);
+          resolve({
+            statusCode: 500,
+            body: JSON.stringify({ error: `Sendgrid error: ${res.statusCode}`, details: data })
+          });
+        }
       });
     });
 
-    req.write(JSON.stringify(mailData));
+    req.on('error', (e) => {
+      console.error('HTTPS request error:', e);
+      resolve({
+        statusCode: 500,
+        body: JSON.stringify({ error: 'Failed to send email', details: e.message })
+      });
+    });
+
+    req.write(postData);
     req.end();
   });
 };
