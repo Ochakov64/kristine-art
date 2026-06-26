@@ -133,9 +133,30 @@
     }
 
     .confirmation {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .confirmation h2 {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    .confirmation p {
       font-weight: 700;
       text-transform: uppercase;
       font-size: 0.875rem;
+      line-height: 1.625;
+      max-width: 24rem;
+    }
+
+    .confirmation-emoji {
+      font-size: 2rem;
     }
 
     .hidden {
@@ -157,19 +178,24 @@
       INSTAGRAM
     </a>
 
-    <p class="confirmation hidden" id="confirmation">YOU'RE IN.</p>
+    <div class="confirmation hidden" id="confirmation">
+      <div class="confirmation-emoji">🧿</div>
+      <h2>YOU'RE IN!</h2>
+      <p>Thank you so much for being here. You'll be the first to access my next art drop.</p>
+    </div>
 
-    <form class="signup-form" id="signup-form">
-      <input type="email" placeholder="EMAIL ADDRESS" required>
+    <form class="signup-form" id="signup-form" name="art-signup" method="POST" netlify>
+      <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
       <button type="submit">NOTIFY ME</button>
     </form>
   </div>
 
   <script>
     document.getElementById('signup-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      document.getElementById('signup-form').classList.add('hidden');
-      document.getElementById('confirmation').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('signup-form').classList.add('hidden');
+        document.getElementById('confirmation').classList.remove('hidden');
+      }, 300);
     });
   </script>
 </body>
