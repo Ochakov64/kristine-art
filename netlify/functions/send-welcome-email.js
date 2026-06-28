@@ -68,7 +68,7 @@ exports.handler = async (event) => {
     </html>
   `;
 
-  const mailData = {
+  const welcomeEmail = {
     personalizations: [{
       to: [{ email }]
     }],
@@ -83,53 +83,78 @@ exports.handler = async (event) => {
     }]
   };
 
-  return new Promise((resolve) => {
-    const postData = JSON.stringify(mailData);
+  const notificationEmail = {
+    personalizations: [{
+      to: [{ email: 'ssteffanie53@gmail.com' }]
+    }],
+    from: {
+      email: fromEmail,
+      name: 'Kristine Stefanija'
+    },
+    subject: 'New signup: ' + email,
+    content: [{
+      type: 'text/html',
+      value: `<p>Someone signed up for your art drop notifications:</p><p><strong>${email}</strong></p>`
+    }]
+  };
 
-    const req = https.request({
-      hostname: 'api.sendgrid.com',
-      port: 443,
-      path: '/v3/mail/send',
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
-      }
-    }, (res) => {
-      console.log(`Sendgrid response status: ${res.statusCode}`);
-      let data = '';
+  const sendEmail = (mailData) => {
+    return new Promise((resolve) => {
+      const postData = JSON.stringify(mailData);
 
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-
-      res.on('end', () => {
-        if (res.statusCode === 202) {
-          console.log('Email sent successfully');
-          resolve({
-            statusCode: 200,
-            body: JSON.stringify({ success: true, message: 'Email sent' })
-          });
-        } else {
-          console.error(`Sendgrid error ${res.statusCode}:`, data);
-          resolve({
-            statusCode: 500,
-            body: JSON.stringify({ error: `Sendgrid error: ${res.statusCode}`, details: data })
-          });
+      const req = https.request({
+        hostname: 'api.sendgrid.com',
+        port: 443,
+        path: '/v3/mail/send',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
         }
-      });
-    });
+      }, (res) => {
+        console.log(`Sendgrid response status: ${res.statusCode}`);
+        let data = '';
 
-    req.on('error', (e) => {
-      console.error('HTTPS request error:', e);
-      resolve({
-        statusCode: 500,
-        body: JSON.stringify({ error: 'Failed to send email', details: e.message })
-      });
-    });
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
 
-    req.write(postData);
-    req.end();
+        res.on('end', () => {
+          if (res.statusCode === 202) {
+            console.log('Email sent successfully');
+            resolve(true);
+          } else {
+            console.error(`Sendgrid error ${res.statusCode}:`, data);
+            resolve(false);
+          }
+        });
+      });
+
+      req.on('error', (e) => {
+        console.error('HTTPS request error:', e);
+        resolve(false);
+      });
+
+      req.write(postData);
+      req.end();
+    });
+  };
+
+  // Send both emails
+  return sendEmail(welcomeEmail).then((success1) => {
+    return sendEmail(notificationEmail).then((success2) => {
+      if (success1 && success2) {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ success: true, message: 'Emails sent' })
+        };
+      } else {
+        return {
+          statusCode: 500,
+          body: JSON.stringify({ error: 'Failed to send one or more emails' })
+        };
+      }
+    });
   });
 };
