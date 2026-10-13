@@ -2,8 +2,8 @@ const https = require('https');
 
 exports.handler = async (event) => {
   console.log('=== Function triggered ===');
-  console.log('API Key exists:', !!process.env.SENDGRID_API_KEY);
-  console.log('From Email:', process.env.SENDGRID_FROM_EMAIL);
+  console.log('API Key exists:', !!process.env.RESEND_API_KEY);
+  console.log('From Email:', process.env.RESEND_FROM_EMAIL);
 
   let email;
 
@@ -21,16 +21,16 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Email is required' }) };
   }
 
-  const apiKey = process.env.SENDGRID_API_KEY;
-  const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+  const apiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL;
 
   if (!apiKey) {
-    console.error('SENDGRID_API_KEY not set');
+    console.error('RESEND_API_KEY not set');
     return { statusCode: 500, body: JSON.stringify({ error: 'API key not configured' }) };
   }
 
   if (!fromEmail) {
-    console.error('SENDGRID_FROM_EMAIL not set');
+    console.error('RESEND_FROM_EMAIL not set');
     return { statusCode: 500, body: JSON.stringify({ error: 'From email not configured' }) };
   }
 
@@ -69,33 +69,17 @@ exports.handler = async (event) => {
   `;
 
   const welcomeEmail = {
-    personalizations: [{
-      to: [{ email }]
-    }],
-    from: {
-      email: fromEmail,
-      name: 'Kristine Stefanija'
-    },
+    from: `Kristine Stefanija <${fromEmail}>`,
+    to: email,
     subject: 'Good energy is coming your way 🌞',
-    content: [{
-      type: 'text/html',
-      value: htmlEmail
-    }]
+    html: htmlEmail
   };
 
   const notificationEmail = {
-    personalizations: [{
-      to: [{ email: 'ssteffanie53@gmail.com' }]
-    }],
-    from: {
-      email: fromEmail,
-      name: 'Kristine Stefanija'
-    },
+    from: `Kristine Stefanija <${fromEmail}>`,
+    to: 'ssteffanie53@gmail.com',
     subject: 'New signup: ' + email,
-    content: [{
-      type: 'text/html',
-      value: `<p>Someone signed up for your art drop notifications:</p><p><strong>${email}</strong></p>`
-    }]
+    html: `<p>Someone signed up for your art drop notifications:</p><p><strong>${email}</strong></p>`
   };
 
   const sendEmail = (mailData) => {
@@ -103,9 +87,9 @@ exports.handler = async (event) => {
       const postData = JSON.stringify(mailData);
 
       const req = https.request({
-        hostname: 'api.sendgrid.com',
+        hostname: 'api.resend.com',
         port: 443,
-        path: '/v3/mail/send',
+        path: '/emails',
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
@@ -113,7 +97,7 @@ exports.handler = async (event) => {
           'Content-Length': Buffer.byteLength(postData)
         }
       }, (res) => {
-        console.log(`Sendgrid response status: ${res.statusCode}`);
+        console.log(`Resend response status: ${res.statusCode}`);
         let data = '';
 
         res.on('data', (chunk) => {
@@ -121,11 +105,11 @@ exports.handler = async (event) => {
         });
 
         res.on('end', () => {
-          if (res.statusCode === 202) {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
             console.log('Email sent successfully');
             resolve(true);
           } else {
-            console.error(`Sendgrid error ${res.statusCode}:`, data);
+            console.error(`Resend error ${res.statusCode}:`, data);
             resolve(false);
           }
         });
