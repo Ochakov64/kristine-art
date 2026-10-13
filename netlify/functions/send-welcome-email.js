@@ -63,6 +63,7 @@ exports.handler = async (event) => {
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.6; margin: 20px 0; color: #1E7FFF;">You'll be the first to access my next art drop.</p>
         <div style="font-size: 24px; margin: 10px 0;">🧿 🧿 🧿</div>
         <p style="font-family: 'Poppins', sans-serif; font-weight: 700; margin-top: 40px; font-size: 14px; color: #1E7FFF;">— Kristine</p>
+        <p style="font-family: 'Poppins', sans-serif; font-weight: 400; margin-top: 30px; font-size: 11px; color: #1E7FFF;">You're receiving this because you signed up for art drop updates at kristinestefanija.com. Reply to this email or contact hello@kristinestefanija.com to unsubscribe.</p>
       </div>
     </body>
     </html>
